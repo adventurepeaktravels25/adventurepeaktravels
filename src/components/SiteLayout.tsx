@@ -1,21 +1,59 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 import type { ReactNode } from "react";
-import { Home, Package, Plane, FileCheck, Phone, Menu, X, Mail, MapPin } from "lucide-react";
-import { useState } from "react";
+import { Home, Package, Plane, FileCheck, Phone, Menu, X, Mail, MapPin, House, Building2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import logo from "@/assets/logo.png";
 import { COMPANY } from "@/lib/site-data";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetClose } from "@/components/ui/sheet";
 
 const NAV = [
   { to: "/", label: "Home", icon: Home },
   { to: "/packages", label: "Packages", icon: Package },
+  { to: "/home-stay", label: "Home Stay", icon: House },
+  { to: "/resorts", label: "Resorts", icon: Building2 },
   { to: "/flights", label: "Flights", icon: Plane },
+  { to: "/visas", label: "Visas", icon: FileCheck },
+  { to: "/contact", label: "Contact", icon: Phone },
+] as const;
+
+const MOBILE_NAV = [
+  { to: "/", label: "Home", icon: Home },
+  
   { to: "/visas", label: "Visas", icon: FileCheck },
   { to: "/contact", label: "Contact", icon: Phone },
 ] as const;
 
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const waLink = `https://wa.me/${COMPANY.whatsapp}`;
+  const [showPackages, setShowPackages] = useState(false);
+  const [showMore, setShowMore] = useState(false);
+  const [detailWaLink, setDetailWaLink] = useState("");
+  const waLink = detailWaLink || `https://wa.me/${COMPANY.whatsapp}`;
+  const matchRoute = useMatchRoute();
+  const isDetailPage = !!(
+    matchRoute({ to: "/packages/Details/$slug", fuzzy: false }) ||
+    matchRoute({ to: "/home-stay/Details/$slug", fuzzy: false }) ||
+    matchRoute({ to: "/resorts/Details/$slug", fuzzy: false })
+  );
+
+  useEffect(() => {
+    const handler = () => setShowPackages(true);
+    window.addEventListener("open-packages-stay-modal", handler);
+    return () => window.removeEventListener("open-packages-stay-modal", handler);
+  }, []);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const customEvent = event as CustomEvent<{ waLink?: string }>;
+      setDetailWaLink(customEvent.detail?.waLink ?? "");
+    };
+    window.addEventListener("detail-book-link", handler as EventListener);
+    return () => window.removeEventListener("detail-book-link", handler as EventListener);
+  }, []);
+
+  useEffect(() => {
+    if (!isDetailPage) setDetailWaLink("");
+  }, [isDetailPage]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
@@ -40,7 +78,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       <header className="sticky top-0 z-40 backdrop-blur-md bg-background/85 border-b border-border">
         <div className="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src={logo} alt="Adventure Peak Travel logo" width={40} height={40} className="h-10 w-10" />
+            <img src={(logo as unknown as { src: string }).src} alt="Adventure Peak Travel logo" width={40} height={40} className="h-10 w-10" />
             <div className="leading-tight">
               <div className="font-display font-bold text-base text-foreground">Adventure Peak</div>
               <div className="text-[10px] text-muted-foreground tracking-widest uppercase">Travel</div>
@@ -97,14 +135,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main className="flex-1 pb-20 md:pb-0">{children}</main>
+      <main className={`flex-1 ${isDetailPage ? "pb-24 md:pb-0" : "pb-20 md:pb-0"}`}>{children}</main>
 
       {/* Footer (desktop) */}
       <footer className="hidden md:block bg-foreground text-background mt-16">
         <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-4 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <img src={logo} alt="" width={36} height={36} className="h-9 w-9" />
+              <img src={(logo as unknown as { src: string }).src} alt="" width={36} height={36} className="h-9 w-9" />
               <span className="font-display font-bold">Adventure Peak Travel</span>
             </div>
             <p className="text-sm text-background/70">
@@ -146,26 +184,143 @@ export function SiteLayout({ children }: { children: ReactNode }) {
       </footer>
 
       {/* Mobile bottom nav (app-like) */}
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-background/95 backdrop-blur border-t border-border safe-bottom">
-        <div className="grid grid-cols-5">
-          {NAV.map(n => {
-            const Icon = n.icon;
-            return (
-              <Link
-                key={n.to}
-                to={n.to}
-                activeProps={{ className: "text-primary" }}
-                inactiveProps={{ className: "text-muted-foreground" }}
-                activeOptions={{ exact: n.to === "/" }}
-                className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium"
-              >
-                <Icon className="h-5 w-5" />
-                {n.label}
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      {isDetailPage ? (
+        <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-background/95 backdrop-blur border-t border-border safe-bottom">
+          <div className="grid grid-cols-2 gap-3 px-4 py-3">
+            <button
+              type="button"
+              onClick={() => setShowMore(true)}
+              className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-4 py-3 text-sm font-semibold text-foreground shadow-sm"
+            >
+              <Menu className="h-4 w-4" />
+              More
+            </button>
+            <a
+              href={waLink}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground shadow-soft"
+            >
+              <Phone className="h-4 w-4" />
+              Book
+            </a>
+          </div>
+        </nav>
+      ) : (
+        <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-background/95 backdrop-blur border-t border-border safe-bottom">
+          <div className="grid grid-cols-4">
+            {MOBILE_NAV.slice(0, 1).map(n => {
+              const Icon = n.icon;
+              return (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  activeProps={{ className: "text-primary" }}
+                  inactiveProps={{ className: "text-muted-foreground" }}
+                  activeOptions={{ exact: n.to === "/" }}
+                  className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium"
+                >
+                  <Icon className="h-5 w-5" />
+                  {n.label}
+                </Link>
+              );
+            })}
+            <button
+              type="button"
+              onClick={() => setShowPackages(true)}
+              className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground"
+            >
+              <Package className="h-5 w-5" />
+              Packages & Stay
+            </button>
+            {MOBILE_NAV.slice(1).map(n => {
+              const Icon = n.icon;
+              return (
+                <Link
+                  key={n.to}
+                  to={n.to}
+                  activeProps={{ className: "text-primary" }}
+                  inactiveProps={{ className: "text-muted-foreground" }}
+                  activeOptions={{ exact: n.to === "/" }}
+                  className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium"
+                >
+                  <Icon className="h-5 w-5" />
+                  {n.label}
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      )}
+
+      <Sheet open={showPackages} onOpenChange={setShowPackages}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-border px-0 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3">
+          <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-border" />
+          <div className="px-5">
+            <SheetHeader className="text-left">
+              <SheetTitle>Packages & Stay</SheetTitle>
+              <SheetDescription>Choose a section to explore live listings.</SheetDescription>
+            </SheetHeader>
+
+            <div className="mt-5 grid gap-3">
+              <SheetClose asChild>
+                <Link
+                  to="/packages"
+                  className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary"
+                >
+                  Packages
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  to="/home-stay"
+                  className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary"
+                >
+                  Home Stay
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link
+                  to="/resorts"
+                  className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary"
+                >
+                  Resorts
+                </Link>
+              </SheetClose>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={showMore} onOpenChange={setShowMore}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-border px-0 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3">
+          <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-border" />
+          <div className="px-5">
+            <SheetHeader className="text-left">
+              <SheetTitle>More Options</SheetTitle>
+              <SheetDescription>Quick links for this page.</SheetDescription>
+            </SheetHeader>
+
+            <div className="mt-5 grid gap-3">
+              <SheetClose asChild>
+                <Link to="/packages" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">Packages</Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link to="/home-stay" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">Home Stay</Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link to="/resorts" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">Resorts</Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link to="/flights" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">Flights</Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link to="/contact" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">Contact</Link>
+              </SheetClose>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Floating WhatsApp */}
       <a

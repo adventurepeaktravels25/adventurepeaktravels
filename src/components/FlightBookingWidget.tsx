@@ -1,3 +1,5 @@
+"use client";
+
 import { useMemo, useRef, useState, useEffect } from "react";
 import { AIRPORTS, type Airport } from "@/lib/airports";
 import { COMPANY } from "@/lib/site-data";
@@ -128,12 +130,12 @@ export function FlightBookingWidget() {
     e.preventDefault();
     if (!from || !to || !depart) return;
     const lines = [
-      "✈️ Flight Booking Enquiry",
+      "Flight Booking Enquiry",
       `Trip: ${trip === "oneway" ? "One Way" : "Round Trip"}`,
-      `From: ${from.city} (${from.code}) — ${from.name}`,
-      `To: ${to.city} (${to.code}) — ${to.name}`,
+      `From: ${from.city} (${from.code}) - ${from.name}`,
+      `To: ${to.city} (${to.code}) - ${to.name}`,
       `Departure: ${depart}`,
-      trip === "roundtrip" ? `Return: ${ret || "—"}` : null,
+      trip === "roundtrip" ? `Return: ${ret || "-"}` : null,
       `Passengers: ${adults} Adult${adults !== 1 ? "s" : ""}${children ? `, ${children} Child${children !== 1 ? "ren" : ""}` : ""}${infants ? `, ${infants} Infant${infants !== 1 ? "s" : ""}` : ""}`,
     ].filter(Boolean).join("\n");
     window.open(`https://wa.me/${COMPANY.whatsapp}?text=${encodeURIComponent(lines)}`, "_blank");

@@ -10,10 +10,12 @@ import singapore from "@/assets/visa-singapore.jpg";
 
 export const COMPANY = {
   name: "Adventure Peak Travel",
-  tagline: "Discover Lakshadweep & Beyond",
+  tagline: "Escape to Lakshadweep",
+  description:
+    "Lakshadweep is the most beautiful island in India, situated off the coast of Kerala. Trending across social media, it is drawing travelers from around the world to explore its turquoise lagoons, soft beaches, and unforgettable island experiences.",
   email: "adventurepeaktravels25@gmail.com",
   phones: ["+91 94961 40068", "+91 70345 20877"],
-  location: "Lakshadweep, India",
+  location: "Agatti Island, Agatti, Lakshadweep",
   whatsapp: "919496140068",
 };
 
@@ -23,7 +25,7 @@ export type Package = {
   badge?: string;
   price: number;
   originalPrice: number;
-  image: string;
+  image: string | { src: string };
   description: string;
   highlights: string[];
 };
@@ -121,11 +123,65 @@ export const PACKAGES: Package[] = [
   },
 ];
 
+export type StayListing = {
+  slug: string;
+  name: string;
+  type: "Home Stay" | "Resort";
+  badge?: string;
+  price: number;
+  originalPrice: number;
+  image: string | { src: string };
+  description: string;
+  highlights: string[];
+};
+
+export const HOME_STAYS: StayListing[] = [
+  {
+    slug: "beach-homestay",
+    name: "Lakshadweep Beach Home Stay",
+    type: "Home Stay",
+    badge: "Authentic",
+    price: 18500,
+    originalPrice: 21000,
+    image: homestay,
+    description:
+      "A peaceful beachside home stay experience with local hospitality, easy beach access, and a relaxed island rhythm.",
+    highlights: ["Beachfront stay", "Local hospitality", "Quiet island setting", "Ideal for couples and families"],
+  },
+];
+
+export const RESORTS: StayListing[] = [
+  {
+    slug: "lagoon-resort",
+    name: "Lagoon View Resort",
+    type: "Resort",
+    badge: "Premium",
+    price: 32999,
+    originalPrice: 36999,
+    image: premium,
+    description:
+      "A refined resort stay with lagoon views, comfortable rooms, and a polished island holiday atmosphere.",
+    highlights: ["Lagoon-facing rooms", "Premium comfort", "Breakfast included", "Great for relaxed vacations"],
+  },
+  {
+    slug: "island-resort",
+    name: "Island Escape Resort",
+    type: "Resort",
+    badge: "Popular",
+    price: 28999,
+    originalPrice: 31999,
+    image: silver,
+    description:
+      "A well-rounded resort option for travelers who want easy access to sightseeing, comfort, and good value.",
+    highlights: ["Comfortable rooms", "Island sightseeing access", "Family-friendly stay", "Value-for-money resort"],
+  },
+];
+
 export type Visa = {
   slug: string;
   country: string;
   flag: string;
-  image: string;
+  image: string | { src: string };
   description: string;
   highlights: string[];
 };

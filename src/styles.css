@@ -1,8 +1,23 @@
-@import "tailwindcss" source(none);
-@source "../src";
-@import "tw-animate-css";
+@import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
+
+@keyframes activities-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.activities-marquee {
+  animation: activities-marquee 28s linear infinite;
+}
+
+.activities-marquee:hover {
+  animation-play-state: paused;
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
