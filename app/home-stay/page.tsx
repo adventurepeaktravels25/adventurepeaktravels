@@ -60,7 +60,7 @@ export default async function HomeStayPage() {
       <StructuredData data={faqSchema} />
       <section className="relative overflow-hidden bg-gradient-ocean text-primary-foreground">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.14),transparent_40%)]" />
-        <div className="relative max-w-7xl mx-auto px-6 py-10 md:py-14">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-10 md:py-14">
           <div className="max-w-3xl">
             <h1 className="mt-2 text-4xl md:text-5xl font-bold leading-tight">Home Stay</h1>
             <p className="mt-4 max-w-2xl text-base md:text-lg leading-7 text-primary-foreground/85">
@@ -71,7 +71,7 @@ export default async function HomeStayPage() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 py-10 md:py-14">
+      <section className="hidden sm:block max-w-7xl mx-auto px-6 py-10 md:py-14">
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[
             "Beachside comfort",
@@ -81,13 +81,13 @@ export default async function HomeStayPage() {
           ].map((item) => (
             <div key={item} className="rounded-2xl border border-border bg-card p-5 shadow-card">
               <CheckCircle2 className="h-5 w-5 text-primary" />
-              <p className="mt-3 text-sm font-medium text-foreground">{item}</p>
+              <p className="mt-3 hidden text-sm font-medium text-foreground sm:block">{item}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-6 pb-12 md:pb-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 mt-8 sm:mt-0 pb-12 md:pb-16">
         <div className="mb-6 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-widest text-primary">Stay options</p>

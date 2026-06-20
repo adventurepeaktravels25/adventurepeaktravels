@@ -1,11 +1,17 @@
+ "use client";
+
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { Building2, FileCheck, Home, House, Mail, MapPin, Menu, Package, Phone, Plane, X } from "lucide-react";
+import { useState } from "react";
+import { Building2, FileCheck, Home, House, Mail, MapPin, Menu, Package, Phone, Plane, Sparkles, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { COMPANY } from "@/lib/site-data";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 
 const NAV = [
   { to: "/", label: "Home", icon: Home },
+  { to: "/about", label: "About Us", icon: Sparkles },
+  { to: "/explore-lakshadweep", label: "Explore Lakshadweep", icon: Sparkles },
   { to: "/packages", label: "Packages", icon: Package },
   { to: "/home-stay", label: "Home Stay", icon: House },
   { to: "/resorts", label: "Resorts", icon: Building2 },
@@ -15,6 +21,7 @@ const NAV = [
 ] as const;
 
 export function SiteLayout({ children }: { children: ReactNode }) {
+  const [showPackages, setShowPackages] = useState(false);
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <div className="hidden md:block bg-gradient-ocean text-primary-foreground text-xs">
@@ -128,10 +135,15 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               </Link>
             );
           })}
-          <Link href="/packages" className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
+          <button
+            type="button"
+            onClick={() => setShowPackages(true)}
+            onTouchEnd={() => setShowPackages(true)}
+            className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground touch-manipulation"
+          >
             <Package className="h-5 w-5" />
             Packages & Stay
-          </Link>
+          </button>
           <Link href="/visas" className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
             <FileCheck className="h-5 w-5" />
             Visas
@@ -142,6 +154,44 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </Link>
         </div>
       </nav>
+
+      <Sheet open={showPackages} onOpenChange={setShowPackages}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-border px-0 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3"
+        >
+          <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-border" />
+          <div className="px-5">
+            <SheetHeader className="text-left">
+              <SheetTitle>Packages & Stay</SheetTitle>
+              <SheetDescription>Choose a section to explore live listings.</SheetDescription>
+            </SheetHeader>
+
+            <div className="mt-5 grid gap-3">
+              <SheetClose asChild>
+                <Link href="/packages" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">
+                  Packages
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link href="/home-stay" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">
+                  Home Stay
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link href="/resorts" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">
+                  Resorts
+                </Link>
+              </SheetClose>
+              <SheetClose asChild>
+                <Link href="/flights" className="rounded-2xl border border-border bg-card px-4 py-4 text-left font-medium hover:bg-secondary">
+                  Flights
+                </Link>
+              </SheetClose>
+            </div>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
