@@ -18,12 +18,16 @@ export async function GET() {
     `${base}/resorts`,
     `${base}/flights`,
     `${base}/visas`,
+    `${base}/visas/uae`,
+    `${base}/visas/malaysia`,
+    `${base}/visas/maldives`,
+    `${base}/visas/singapore`,
     `${base}/contact`,
-    ...packages.map(p => `${base}/packages/Details/${p.slug}`),
-    ...homeStays.map(p => `${base}/home-stay/Details/${p.slug}`),
-    ...resorts.map(p => `${base}/resorts/Details/${p.slug}`),
+    ...packages.map((p) => `${base}/packages/Details/${p.slug}`),
+    ...homeStays.map((p) => `${base}/home-stay/Details/${p.slug}`),
+    ...resorts.map((p) => `${base}/resorts/Details/${p.slug}`),
   ];
 
-  const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(u => `<url><loc>${u}</loc></url>`).join("")}</urlset>`;
+  const body = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map((u) => `<url><loc>${u}</loc></url>`).join("")}</urlset>`;
   return new Response(body, { headers: { "Content-Type": "application/xml" } });
 }
