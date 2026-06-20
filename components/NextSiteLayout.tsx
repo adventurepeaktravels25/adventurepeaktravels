@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { useState } from "react";
 import { Building2, FileCheck, Home, House, Mail, MapPin, Menu, Package, Phone, Plane, Sparkles, X } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { COMPANY } from "@/lib/site-data";
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetClose, SheetTrigger } from "@/components/ui/sheet";
 
 const NAV = [
   { to: "/", label: "Home", icon: Home },
@@ -21,7 +20,6 @@ const NAV = [
 ] as const;
 
 export function SiteLayout({ children }: { children: ReactNode }) {
-  const [showPackages, setShowPackages] = useState(false);
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <div className="hidden md:block bg-gradient-ocean text-primary-foreground text-xs">
@@ -124,38 +122,38 @@ export function SiteLayout({ children }: { children: ReactNode }) {
         </div>
       </footer>
 
-      <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-background/95 backdrop-blur border-t border-border safe-bottom">
-        <div className="grid grid-cols-4">
-          {NAV.slice(0, 1).map((n) => {
-            const Icon = n.icon;
-            return (
-              <Link key={n.to} href={n.to} className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
-                <Icon className="h-5 w-5" />
-                {n.label}
-              </Link>
-            );
-          })}
-          <button
-            type="button"
-            onClick={() => setShowPackages(true)}
-            onTouchEnd={() => setShowPackages(true)}
-            className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground touch-manipulation"
-          >
-            <Package className="h-5 w-5" />
-            Packages & Stay
-          </button>
-          <Link href="/visas" className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
-            <FileCheck className="h-5 w-5" />
-            Visas
-          </Link>
-          <Link href="/contact" className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
-            <Phone className="h-5 w-5" />
-            Contact
-          </Link>
-        </div>
-      </nav>
+      <Sheet>
+        <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-background/95 backdrop-blur border-t border-border safe-bottom">
+          <div className="grid grid-cols-4">
+            {NAV.slice(0, 1).map((n) => {
+              const Icon = n.icon;
+              return (
+                <Link key={n.to} href={n.to} className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
+                  <Icon className="h-5 w-5" />
+                  {n.label}
+                </Link>
+              );
+            })}
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground touch-manipulation"
+              >
+                <Package className="h-5 w-5" />
+                Packages & Stay
+              </button>
+            </SheetTrigger>
+            <Link href="/visas" className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
+              <FileCheck className="h-5 w-5" />
+              Visas
+            </Link>
+            <Link href="/contact" className="flex flex-col items-center justify-center py-2.5 gap-0.5 text-[10px] font-medium text-muted-foreground">
+              <Phone className="h-5 w-5" />
+              Contact
+            </Link>
+          </div>
+        </nav>
 
-      <Sheet open={showPackages} onOpenChange={setShowPackages}>
         <SheetContent
           side="bottom"
           className="rounded-t-3xl border-border px-0 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-3"
