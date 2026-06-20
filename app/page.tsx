@@ -4,6 +4,7 @@ import heroFallback from "@/assets/hero-lakshadweep.jpg";
 import { HeroBanner } from "@/components/HeroBanner";
 import { ActivitiesSlider } from "@/components/ActivitiesSlider";
 import { MobilePackageSlider } from "@/components/MobilePackageSlider";
+import { LoadingCardLink } from "@/components/LoadingCardLink";
 import { fetchCatalogueItems, formatCurrency, type CatalogueItem } from "@/lib/api/catalogue";
 import { fetchActiveBanners } from "@/lib/api/banners";
 import { COMPANY, VISAS } from "@/lib/site-data";
@@ -49,7 +50,7 @@ export default async function HomePage() {
             { icon: Plane, title: "Flight Tickets", desc: "Domestic and international flight bookings at the best fares with 24/7 support.", to: "/flights" },
             { icon: FileCheck, title: "Tourist Visas", desc: "Hassle-free visa processing for UAE, Malaysia, Maldives, Singapore and more.", to: "/visas" },
           ].map(s => (
-            <Link key={s.title} href={s.to} className="group rounded-2xl border border-border bg-card p-4 sm:p-7 shadow-card hover:shadow-soft hover:-translate-y-1 transition-all">
+            <LoadingCardLink key={s.title} href={s.to} className="group rounded-2xl border border-border bg-card p-4 sm:p-7 shadow-card hover:shadow-soft hover:-translate-y-1 transition-all">
               <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-ocean text-primary-foreground flex items-center justify-center">
                 <s.icon className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
@@ -58,9 +59,9 @@ export default async function HomePage() {
               <span className="mt-3 sm:mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
                 Learn more <ArrowRight className="h-4 w-4" />
               </span>
-            </Link>
+            </LoadingCardLink>
           ))}
-          <Link href="/resorts" className="group rounded-2xl border border-border bg-card p-4 sm:p-7 shadow-card hover:shadow-soft hover:-translate-y-1 transition-all md:hidden">
+          <LoadingCardLink href="/resorts" className="group rounded-2xl border border-border bg-card p-4 sm:p-7 shadow-card hover:shadow-soft hover:-translate-y-1 transition-all md:hidden">
             <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-xl bg-gradient-ocean text-primary-foreground flex items-center justify-center">
               <Star className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
@@ -69,7 +70,7 @@ export default async function HomePage() {
             <span className="mt-3 sm:mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary group-hover:gap-2 transition-all">
               Learn more <ArrowRight className="h-4 w-4" />
             </span>
-          </Link>
+          </LoadingCardLink>
         </div>
       </section>
 
@@ -187,7 +188,7 @@ function FeaturedCard({ item, href }: { item: CatalogueItem; href: string; mobil
   const cover = item.images?.[0];
   const tier = item.packages?.[0];
   return (
-    <Link href={href} className="group rounded-2xl overflow-hidden bg-card shadow-card hover:shadow-soft transition-all">
+    <LoadingCardLink href={href} className="group rounded-2xl overflow-hidden bg-card shadow-card hover:shadow-soft transition-all">
       <div className="relative aspect-[4/3] sm:aspect-square overflow-hidden">
         {cover ? <img src={cover} alt={item.name} loading="lazy" width={1024} height={768} className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-700" /> : <div className="h-full w-full bg-secondary" />}
       </div>
@@ -198,7 +199,7 @@ function FeaturedCard({ item, href }: { item: CatalogueItem; href: string; mobil
           <span className="text-sm sm:text-xl font-bold text-primary">{formatCurrency(tier?.price ?? 0)}</span>
         </div>
       </div>
-    </Link>
+    </LoadingCardLink>
   );
 }
 
@@ -206,7 +207,7 @@ function FeaturedStayCard({ item, href }: { item: CatalogueItem; href: string })
   const cover = item.images?.[0];
   const tier = item.packages?.[0];
   return (
-    <Link href={href} className="group rounded-2xl overflow-hidden bg-card shadow-card hover:shadow-soft transition flex flex-col sm:flex-row">
+    <LoadingCardLink href={href} className="group rounded-2xl overflow-hidden bg-card shadow-card hover:shadow-soft transition flex flex-col sm:flex-row">
       <div className="sm:w-2/5 aspect-[4/3] sm:aspect-square overflow-hidden">
         {cover ? <img src={cover} alt={item.name} loading="lazy" width={1024} height={768} className="h-full w-full object-cover bg-background group-hover:scale-105 transition-transform duration-700" /> : <div className="h-full w-full bg-secondary" />}
       </div>
@@ -218,6 +219,6 @@ function FeaturedStayCard({ item, href }: { item: CatalogueItem; href: string })
           <span className="text-sm sm:text-xl font-bold text-primary">{item.priceVisible ? formatCurrency(tier?.price ?? 0) : "Contact for pricing"}</span>
         </div>
       </div>
-    </Link>
+    </LoadingCardLink>
   );
 }

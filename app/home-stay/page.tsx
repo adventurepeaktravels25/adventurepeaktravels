@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, MapPin, Sparkles } from "lucide-react";
+import { CheckCircle2, MapPin, Sparkles } from "lucide-react";
 import { fetchCatalogueItems, formatCurrency } from "@/lib/api/catalogue";
 import { COMPANY } from "@/lib/site-data";
 import { SITE_URL } from "@/lib/seo";
 import { StructuredData } from "@/components/StructuredData";
+import { LoadingCardLink } from "@/components/LoadingCardLink";
 
 export const metadata = {
   title: "Home Stays - Adventure Peak Travel",
@@ -100,7 +101,7 @@ export default async function HomeStayPage() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5">
           {items.map((item) => (
-            <Link
+            <LoadingCardLink
               key={item._id}
               href={`/home-stay/Details/${item.slug}`}
               className="overflow-hidden rounded-2xl bg-card shadow-card"
@@ -109,11 +110,8 @@ export default async function HomeStayPage() {
               <div className="p-4">
                 <h2 className="font-semibold line-clamp-2">{item.name}</h2>
                 <p className="mt-1 text-sm text-primary">{formatCurrency(item.packages?.[0]?.price ?? 0)}</p>
-                <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
-                  View details <ArrowRight className="h-4 w-4" />
-                </span>
               </div>
-            </Link>
+            </LoadingCardLink>
           ))}
         </div>
       </section>

@@ -3,6 +3,7 @@ import { ArrowLeft, CalendarDays, Check, Clock3, MapPin, Minus, Plus } from "luc
 import { fetchCatalogueItems, formatCurrency, type CatalogueItem } from "@/lib/api/catalogue";
 import { SITE_URL } from "@/lib/seo";
 import { StructuredData } from "@/components/StructuredData";
+import { DetailPageTitle } from "@/components/DetailPageTitle";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -81,6 +82,7 @@ export default async function ResortDetailsPage({ params }: { params: { slug: st
     <>
       <StructuredData data={breadcrumbSchema} />
       <StructuredData data={lodgingSchema} />
+      <DetailPageTitle title={item.name} />
       <ResortDetailsView item={item} />
     </>
   );
@@ -98,22 +100,24 @@ function ResortDetailsView({ item }: { item: ResortDetails }) {
   return (
     <>
       <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 md:pt-8">
-        <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
-          <Link href="/" className="hover:text-primary">Home</Link>
-          <span>/</span>
-          <Link href="/resorts" className="hover:text-primary">Resorts</Link>
-          <span>/</span>
-          <span className="text-foreground line-clamp-1">{item.name}</span>
-        </nav>
-        <Link href="/resorts" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
-          <ArrowLeft className="h-4 w-4" />
-          Back to resorts
-        </Link>
-        <h1 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">{item.name}</h1>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {tier?.duration && <span className="inline-flex items-center rounded-full bg-secondary/70 px-3 py-1 text-xs font-medium text-foreground">{tier.duration}</span>}
-          {item.category?.name && <span className="inline-flex items-center rounded-full bg-secondary/70 px-3 py-1 text-xs font-medium text-foreground">{item.category.name}</span>}
-          {item.location && <span className="inline-flex items-center gap-1 rounded-full bg-secondary/70 px-3 py-1 text-xs font-medium text-foreground"><MapPin className="h-3.5 w-3.5" />{item.location}</span>}
+        <div className="hidden md:block">
+          <nav className="mb-4 flex flex-wrap items-center gap-2 text-xs sm:text-sm text-muted-foreground">
+            <Link href="/" className="hover:text-primary">Home</Link>
+            <span>/</span>
+            <Link href="/resorts" className="hover:text-primary">Resorts</Link>
+            <span>/</span>
+            <span className="text-foreground line-clamp-1">{item.name}</span>
+          </nav>
+          <Link href="/resorts" className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary">
+            <ArrowLeft className="h-4 w-4" />
+            Back to resorts
+          </Link>
+          <h1 className="mt-4 text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">{item.name}</h1>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {tier?.duration && <span className="inline-flex items-center rounded-full bg-secondary/70 px-3 py-1 text-xs font-medium text-foreground">{tier.duration}</span>}
+            {item.category?.name && <span className="inline-flex items-center rounded-full bg-secondary/70 px-3 py-1 text-xs font-medium text-foreground">{item.category.name}</span>}
+            {item.location && <span className="inline-flex items-center gap-1 rounded-full bg-secondary/70 px-3 py-1 text-xs font-medium text-foreground"><MapPin className="h-3.5 w-3.5" />{item.location}</span>}
+          </div>
         </div>
       </section>
 
@@ -128,6 +132,7 @@ function ResortDetailsView({ item }: { item: ResortDetails }) {
               )}
             </div>
 
+            <p className="mb-2 text-base font-bold uppercase tracking-[0.2em] text-primary">{item.name}</p>
             <div className="rounded-2xl border border-border bg-card p-5 md:p-6 shadow-card">
               <div className="flex items-start justify-between gap-4">
                 <div>
