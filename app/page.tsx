@@ -27,6 +27,9 @@ export const metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function HomePage() {
   const [packages, homeStays, resorts, banners] = await Promise.allSettled([
     fetchCatalogueItems({ slug: "packages", page: 1, limit: 20, search: "" }),

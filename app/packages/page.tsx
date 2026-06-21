@@ -22,6 +22,9 @@ export const metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function PackagesPage() {
   const items = await fetchCatalogueItems({ slug: "packages", page: 1, limit: 20, search: "" });
   const breadcrumbSchema = {

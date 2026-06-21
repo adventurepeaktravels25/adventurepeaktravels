@@ -23,6 +23,9 @@ export const metadata = {
   },
 };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function HomeStayPage() {
   const items = await fetchCatalogueItems({ slug: "home-stays", page: 1, limit: 20, search: "" });
   const breadcrumbSchema = {

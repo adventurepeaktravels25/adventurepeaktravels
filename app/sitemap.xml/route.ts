@@ -1,6 +1,9 @@
 import { fetchCatalogueItems } from "@/lib/api/catalogue";
 import { SITE_URL } from "@/lib/seo";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET() {
   const [packages, homeStays, resorts] = await Promise.all([
     fetchCatalogueItems({ slug: "packages", page: 1, limit: 50, search: "" }),

@@ -73,6 +73,7 @@ export async function fetchCatalogueItems({
 
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -94,6 +95,7 @@ export async function fetchCatalogueServiceDetails(serviceSlug: string) {
 
     const response = await fetch(url, {
       headers: { Accept: "application/json" },
+      cache: "no-store",
     });
 
     if (!response.ok) {

@@ -15,8 +15,6 @@ async function loadPackage(slug: string): Promise<CatalogueServiceDetails | null
     fetchCatalogueItems({ slug: "packages", page: 1, limit: 50, search: "" }),
   ]);
 
-  console.log("detailResult", detailResult);
-
   const detail = detailResult.status === "fulfilled" ? (detailResult.value as CatalogueServiceDetails) : null;
   const fromList = listResult.status === "fulfilled" ? listResult.value.find(item => item.slug === slug) ?? null : null;
 
